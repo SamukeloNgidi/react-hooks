@@ -31,6 +31,7 @@ function App() {
   //ref allows you read the updated value instantly witout waiting for a re-render
   //default syntax: const ref = useRef(initialValue);
   const countRef = useRef(count);
+  const [name, setName] = useState("Sam");
 
   const handleIncrement = () => {
     setCount(count + 1);
@@ -40,6 +41,22 @@ function App() {
     console.log("ref: ", countRef.current);
   }
 
+  //useRef example 2 (reference elements inside html)
+  const inputRef = useRef();
+  const previousName = useRef();
+
+  const handleFocus = () => {
+    //get current property of ref (which is the html element in this case)
+    console.log(inputRef.current);
+    inputRef.current.focus();
+  }
+
+  //store previous value of state
+  //useRef can be used to store previous value of a state
+  useEffect(() => {
+    previousName.current = name;
+  }, [name]);
+
   return (
     <>
       <h1>React Hooks</h1>
@@ -48,6 +65,12 @@ function App() {
         {/*<button className="button" onClick={() => setCount(count + 1)}> Increment </button>
         <button className="button" onClick={() => setCount(count - 1)}> Decrement </button>*/}
         <button className="button" onClick={handleIncrement}> Increment </button>
+        <hr /><br />
+
+        {/*add ref={inputRef} to your html element*/}
+        <input ref={inputRef} value={name} onChange={e => setName(e.target.value)} />
+        <div>My name is: <strong>{name}</strong> and it used to be <strong>{previousName.current}</strong></div>
+        <button className="button" onClick={handleFocus}> Focus </button> {/*button to focus on the input element*/}
       </div>
     </>
   )
